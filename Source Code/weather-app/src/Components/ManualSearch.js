@@ -149,27 +149,27 @@ const ManualSearch = (param_onSearch) => {
   const handleSearch = () => {
     onSearch(city);
   };
-  const onSearch = (value, _e, info) => {
-    let tempLon = getCoords(value).then(weather => {
+  const onSearch = async (value, _e, info) => {
+    setLoading(true); // Set loading state to true when initiating the search
+  
+    try {
+      const weather = await getCoords(value);
       if (weather) {
-          setLongitude(weather.coord.lon);
-          return weather.coord.lon;
+        setLongitude(weather.coord.lon);
+        setLatitude(weather.coord.lat);
+        // Delay setting loading state to false for 3 seconds (3000 milliseconds)
+        setTimeout(() => setLoading(false), 3000);
       } else {
-          console.log('Weather data not found.');
+        console.log('Weather data not found.');
+        setLoading(false); // Set loading state to false when weather data is not found
       }
-    });
-    let tempLat = getCoords(value).then(weather => {
-      if (weather) {
-        console.log(weather.coord.lat);
-          setLatitude(weather.coord.lat);
-          return weather.coord.lat;
-      } else {
-          console.log('Weather data not found.');
-      }
-    });
-    
-    setTimeout(setLoading(false), 30000);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError('Error fetching data');
+      setLoading(false); // Set loading state to false when there's an error fetching data
+    }
   };
+  
     // Fetch weather data on component mount
     useEffect(() => {
       getLocation(); // Call getLocation on component mount
@@ -177,13 +177,18 @@ const ManualSearch = (param_onSearch) => {
     }, [longitude, Latitude]);
   return (
     <div>
-      <Space direction="vertical">
-      <Search placeholder="input search text" onSearch={onSearch} enterButton style={{
-      margin:"10px",
-      
-      }} />
-      </Space>
-      <br></br>
+      <h2 style={{marginLeft:"17px"}}>Enter any City or Country</h2>
+     <Space direction="vertical">
+  <Search
+    placeholder="Type here.."
+    onSearch={onSearch}
+    enterButton='Get Forecast'
+    
+    style={{ paddingLeft:"15px",color:'black'}}
+  />
+</Space>
+      <br/>
+      <br/>
       {loading ? (
         <Spin />
       ) : error ? (
@@ -193,6 +198,9 @@ const ManualSearch = (param_onSearch) => {
       ) : (
         <><Card title="Weather Details">
           
+            <div>
+            <CaretDownOutlined /> Location: {weatherData.name}
+          </div>
           <div>
             <SunOutlined /> Current Temperature: {Math.round(weatherData.main.temp - 273.15)}°C
           </div>
