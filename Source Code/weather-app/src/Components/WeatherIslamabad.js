@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Spin, Button } from 'antd';
 import { SunOutlined, ClockCircleOutlined, CalendarOutlined,CaretDownOutlined,CloudOutlined,CompressOutlined,InfoCircleOutlined,PlusCircleOutlined,MinusCircleOutlined } from '@ant-design/icons';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import axios from 'axios';
 import pic1 from '../Assets/01d.png';
 import pic2 from '../Assets/01n.png';
@@ -23,6 +25,7 @@ import pic18 from '../Assets/50n.png';
 const gridStyle = {
   width: '25%',
   textAlign: 'center',
+  display: 'inline-block',
 };
 // Define the dictionary mapping file names to imported images
 const imageDictionary = {
@@ -135,13 +138,16 @@ const WeatherIslamabad = () => {
   // Fetch weather data on component mount
   useEffect(() => {
     getLocation();
+    AOS.init({
+      offset:300,
+    });
 
   }, []);
 
   console.log(forecastData);
   return (
     <div>
-      <h1 style={{ textAlign: 'center' }}>Current Weather</h1>
+     <div data-aos="fade-up"> <h1 style={{ textAlign: 'center' }}>Current Weather</h1></div>
 
 
 
@@ -152,7 +158,9 @@ const WeatherIslamabad = () => {
       ) : !weatherData ? (
         <div>No weather data available</div>
       ) : (
-        <><Card title="Weather Details">
+        <>
+         <div data-aos="fade-up">
+          <Card title="Weather Details">
           <div>
             <CaretDownOutlined/> Location: {weatherData.name}
           </div>
@@ -175,7 +183,9 @@ const WeatherIslamabad = () => {
             <InfoCircleOutlined /> Weather Description: {weatherData.weather[0].description}
           </div>
         </Card>
+        </div>
           <Card title="Hourly Forecast" style={{ marginTop: '10px' }}>
+          <div data-aos="fade-up">
             <Card.Grid style={gridStyle}>
 
               <div className='hourly-weather-item'>
@@ -245,8 +255,10 @@ const WeatherIslamabad = () => {
               <br></br>
               <span>{Math.round(forecastData.list[7].main.feels_like - 273.15)}°C</span>
             </div></Card.Grid>
+            </div>
           </Card>
           <Card title="Daily Forecast (5 Days)" style={{ marginTop: '10px' }}>
+          <div data-aos="fade-up">
             <Card.Grid style={gridStyle}>
 
               <div className='hourly-weather-item'>
@@ -292,6 +304,7 @@ const WeatherIslamabad = () => {
                 <br></br>
                 <span>{Math.round(forecastData.list[32].main.feels_like - 273.15)}°C</span>
               </div></Card.Grid>
+              </div>
           </Card>
 
         </>

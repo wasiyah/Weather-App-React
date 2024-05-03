@@ -23,7 +23,7 @@ const items = [
       { label: 'Peshawar', key: '/Peshawar' },
     ],
   },
-  { label: 'Search Manually', key: '/SearchManually', Icon: <SearchOutlined /> },
+  { label: 'Search Manually', key: '/', Icon: <SearchOutlined /> },
 ];
 
 const App = () => {
@@ -76,7 +76,7 @@ const App = () => {
           <div style={{ padding: 24, minHeight: 360, background: colorBgContainer, borderRadius: borderRadiusLG }}>
             {/* Content based on routes */}
             <Routes>
-              <Route path="/SearchManually" element={<ManualSearch />} />
+              <Route path="/" element={<ManualSearch />} />
               <Route path="/Islamabad" element={<WeatherIslamabad />} />
               <Route path="/Lahore" element={<WeatherLahore />} />
               <Route path="/Karachi" element={<WeatherKarachi />} />

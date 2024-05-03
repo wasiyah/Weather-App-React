@@ -3,7 +3,9 @@ import { useEffect } from 'react';
 import React, { useState } from 'react';
 import { Input,Space } from 'antd';
 import { Card, Spin } from 'antd';
-import { SunOutlined, ClockCircleOutlined, CalendarOutlined,CaretDownOutlined,CloudOutlined,CompressOutlined,InfoCircleOutlined,PlusCircleOutlined,MinusCircleOutlined } from '@ant-design/icons';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import { SunOutlined,CaretDownOutlined,CloudOutlined,CompressOutlined,InfoCircleOutlined,PlusCircleOutlined,MinusCircleOutlined } from '@ant-design/icons';
 import pic1 from '../Assets/01d.png';
 import pic2 from '../Assets/01n.png';
 import pic3 from '../Assets/02d.png';
@@ -28,6 +30,8 @@ const { Search } = Input;
 const gridStyle = {
   width: '25%',
   textAlign: 'center',
+  display: 'inline-block',
+
 };
 // Define the dictionary mapping file names to imported images
 const imageDictionary = {
@@ -124,10 +128,6 @@ const ManualSearch = (param_onSearch) => {
     }
   };
 
-
-
-  
-
   async function getCoords(cityName) {
     const apiKey = '2dafc8695cb27d200d2a802b46187513';
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${apiKey}`;
@@ -173,6 +173,9 @@ const ManualSearch = (param_onSearch) => {
     // Fetch weather data on component mount
     useEffect(() => {
       getLocation(); // Call getLocation on component mount
+      AOS.init({
+        offset:300,
+      });
       console.log(longitude + " " + Latitude);
     }, [longitude, Latitude]);
   return (
@@ -196,7 +199,9 @@ const ManualSearch = (param_onSearch) => {
       ) : !weatherData ? (
         <div>No weather data available</div>
       ) : (
-        <><Card title="Weather Details">
+        <>
+        <div data-aos="fade-up">
+        <Card title="Weather Details">
           
             <div>
             <CaretDownOutlined /> Location: {weatherData.name}
@@ -220,7 +225,10 @@ const ManualSearch = (param_onSearch) => {
             <InfoCircleOutlined /> Weather Description: {weatherData.weather[0].description}
           </div>
         </Card>
+        </div>
+        
           <Card title="Hourly Forecast" style={{ marginTop: '10px' }}>
+          < div data-aos="fade-up">
             <Card.Grid style={gridStyle}>
 
               <div className='hourly-weather-item'>
@@ -257,6 +265,7 @@ const ManualSearch = (param_onSearch) => {
               <br></br>
               <span>{Math.round(forecastData.list[3].main.feels_like - 273.15)}°C</span>
             </div></Card.Grid>
+           
             <Card.Grid style={gridStyle}>
               <div>
                 <img style={{width: '40px', height: '40px', background: '#000000', borderRadius: '50%'}}  src={getImage(forecastData.list[4].weather[0].icon)} /><br/>
@@ -290,8 +299,12 @@ const ManualSearch = (param_onSearch) => {
               <br></br>
               <span>{Math.round(forecastData.list[7].main.feels_like - 273.15)}°C</span>
             </div></Card.Grid>
+            </div> 
           </Card>
+          
+          
           <Card title="Daily Forecast (5 Days)" style={{ marginTop: '10px' }}>
+          <div div data-aos="fade-up">
             <Card.Grid style={gridStyle}>
 
               <div className='hourly-weather-item'>
@@ -337,6 +350,7 @@ const ManualSearch = (param_onSearch) => {
                 <br></br>
                 <span>{Math.round(forecastData.list[32].main.feels_like - 273.15)}°C</span>
               </div></Card.Grid>
+              </div>
           </Card>
 
         </>
